@@ -1,0 +1,88 @@
+{% extends "trivia/layout.html" %}
+
+{% block head %}
+    <!--React, reactDOM, Babel-->
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <!--Chart.js library-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+
+{% block body %}
+
+
+<div class="col-12 d-flex flex-column justify-content-center align-items-center vh-100 bg-secondary">
+    <h1>LEADERBOARD</h1>
+
+    <div id="congratsNotifDiv">
+
+    </div>
+
+    {% for player in topPlayers %}
+        <div>
+            <div class="bg-light text-center p-3">
+                <div class="leaderBoardNames fs-10">{{player.username}}</div>
+                <div class="fs-4">score: {{player.top_score}}</div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+
+{% if user.is_authenticated %}
+
+<script type="text/babel">
+    // Function to check and render
+    function checkAndRender() {
+        // Get leaderboard names
+        const leaderBoardNames = document.querySelectorAll('.leaderBoardNames');
+
+        // get the signed-in user's name
+        // remove the "Signed in as "____name____ (first part) (remove first 13 chars)
+        const nameText = document.getElementById("signedInMsgDiv").innerHTML;
+        // Identify the starting and ending points for the desired text
+        const startTag = "<strong>";
+        const endTag = "</strong>";
+        
+        const startIndex = nameText.indexOf(startTag) + startTag.length;
+        const endIndex = nameText.indexOf(endTag, startIndex);
+        
+        // Extract the text between the start and end points
+        const name = nameText.substring(startIndex, endIndex);
+
+
+        // Check if the name is in the leaderboard
+        const containsName = Array.from(leaderBoardNames).map(element => element.innerHTML.trim().toLowerCase()).includes(name.trim().toLowerCase());
+
+        // Render the React component
+        const congratsBanner = (
+            <div>
+                {containsName ? (
+                    <p class="bg-success">CONGRATS! YOU ARE ON THE LEADERBOARD</p>
+                ) : (
+                    <p class="bg-danger">you are not on the leaderboard</p>
+                )}
+            </div>
+        );
+
+        ReactDOM.render(congratsBanner, document.getElementById("congratsNotifDiv"));
+
+        // If the condition is met, stop the interval
+        if (containsName) {
+            clearInterval(intervalId);
+        }
+    }
+
+    // Run the function every second
+    const intervalId = setInterval(checkAndRender, 1000);
+
+    // Also run it once immediately
+    checkAndRender();
+</script>
+
+{% endif %}
+
+
+{% endblock %}

@@ -1,0 +1,22 @@
+
+{% extends "trivia/layout.html" %}
+
+{% block head %}
+    <!--React, reactDOM, Babel-->
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <!--Chart.js library-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block body %}
+<div class="col-12 d-flex flex-column justify-content-center align-items-center vh-100 bg-secondary">
+    <h1>{{user.username}}'s Profile</h1>
+    <div>top score: {{ top_score }}</div>
+    <div>average score: {{ avg_score }}</div>
+</div>
+{% endblock %}
+
+
+

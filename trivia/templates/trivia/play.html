@@ -1,0 +1,35 @@
+
+{% extends "trivia/layout.html" %}
+<!--uses bootstrap-->
+
+{% block body %}
+<script>
+    
+</script>
+
+<div class="col-12 d-flex flex-column justify-content-center align-items-center vh-100 bg-secondary">
+    <h1>Geography Trivia!</h1>
+    <!--<button id="playBtn" onclick="play(event)">Play</button>-->
+
+    {% if apiWorking %}
+        <div class="bg-light">{{questionText}}</div>
+            {% for answer in allAnswers %}
+                <div>
+                    {% if answer == correctAnswer %}
+                        <a href="{% url 'handlePlayerResponse' selection='correct' %}" class="btn btn-success mt-2 mb-2">{{answer}}</a>
+                    {% else %}
+                        <a href="{% url 'handlePlayerResponse' selection='incorrect' %}" class="btn btn-danger mt-2 mb-2">{{answer}}</a>
+                    {% endif %}
+                </div>
+            {% endfor %}
+    {% else %}
+        <div>
+            API request did not work
+        </div>
+    {% endif %}
+</div>
+
+
+{% endblock %}
+
+
